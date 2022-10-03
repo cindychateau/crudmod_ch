@@ -1,5 +1,5 @@
 #Importamos Flask y lo que utilizamos de flask
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 
 #Importamos la app
 from flask_app import app
@@ -20,8 +20,12 @@ def new():
 def create():
     #Recibimos el formulario a través de una variable llamada request.form
     #request.form = {"first_name":"Juana", "last_name":"De Arco", "email":"juana@cd.com"}
-    User.guardar(request.form)
-    return redirect('/')
+
+    if not User.valida_usuario(request.form):
+        return redirect('/new')
+    else:
+        User.guardar(request.form)
+        return redirect('/')
 
 @app.route('/delete/<int:id>')
 def delete(id):
